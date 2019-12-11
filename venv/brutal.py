@@ -19,6 +19,7 @@ class Fence:
         len = (y2-y1+x2-x1)*2
 
     def show(self):
+        self.len = (self.y2 - self.y1 + self.x2 - self.x1) * 2
         if self.len > 0:
             print(f"Max: {self.len} ({self.y1},{self.x1})-({self.y2},{self.x2})")
         else:
