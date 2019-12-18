@@ -24,6 +24,10 @@ class Fence:
             print(f"Max: {self.len} ({self.y1},{self.x1})-({self.y2},{self.x2})")
         else:
             print("Nie znaleziono miejsca na ogrodzenie na działce")
+    def getLen(self):
+        if -1<self.x1 and self.x1<self.x2 and -1<self.y1 and self.y1<self.y2:
+            self.len = (self.y2 - self.y1 + self.x2 - self.x1) * 2
+        return self.len
 
 
 def brutal(arr):

@@ -1,5 +1,6 @@
 import brutal
 import generator
+import loadTab
 import numpy as np
 
 def func(arr):
@@ -9,20 +10,19 @@ def func(arr):
     max = brutal.Fence()
     for y in range(h - 1):
         for x in range(w - 1):
-            sum = 0
             a, b = y, x
             if arr[y,x]+arr[y+1,x]+arr[y,x+1]==0:
                 while b+1<w and arr[y,b+1]==0:
                     b=b+1
                 while a+1<h and arr[a+1,b]==0 and arr[a+1,x]==0:
                     a=a+1
-   #             if sum(arr[a,x:b])+0==0:
-                max.x1, max.y1, max.x2, max.y2 = x, y, b, a
-                max.show()
-                print(x,y,a,b,max.len)
+                if sum(arr[a,x:b])==0 and 2*(a-y)+2*(b-x)>max.getLen():
+                    max.x1, max.y1, max.x2, max.y2 = x, y, b, a
+    max.show()
+    return
 
-                return
-
-arr = generator.generate(5,4,0.0)
+# arr = generator.generate(5,4,0.0)
+print(fenceSize(0,0,2,2))
+arr = loadTab.load()
 print(arr)
 func(arr)
