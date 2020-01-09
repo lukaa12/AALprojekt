@@ -2,6 +2,7 @@ import sys
 import loadTab
 import generator
 import brutal
+import function
 
 argLen = sys.argv.__len__()
 
@@ -9,6 +10,8 @@ if argLen == 2 and sys.argv[1] == '-m1':
     matrix = loadTab.load()
     result = brutal.brutal(matrix)
     result.show()
+    result2 = function.func(matrix)
+    result2.show()
 
 elif argLen == 4 and sys.argv[1] == '-m2':
     wymiary = sys.argv[2].split('x')
@@ -17,6 +20,8 @@ elif argLen == 4 and sys.argv[1] == '-m2':
     print(matrix)
     result = brutal.brutal(matrix)
     result.show()
+    result2 = function.func(matrix)
+    result2.show()
 
 elif argLen == 6 and sys.argv[1] == '-m3':
     null
