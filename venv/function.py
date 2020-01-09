@@ -51,10 +51,11 @@ def func(arr):
                 lptr = lptr +1
     return maxFence
 
-# arr = generator.generate(5,5,0.0)
-# print(fenceSize(0,0,2,2))
-arr = loadTab.load()
-# print(arr)
-# print('-------------------')
-fencePredicted = func(arr)
-fencePredicted.show()
+if __name__ == "__main__":
+    # arr = generator.generate(5,5,0.0)
+    # print(fenceSize(0,0,2,2))
+    arr = loadTab.load()
+    # print(arr)
+    # print('-------------------')
+    fencePredicted = func(arr)
+    fencePredicted.show()
