@@ -4,7 +4,17 @@ import loadTab
 import numpy as np
 
 def func(arr):
-    """Funkcja do znajdowania ogrodzenia, lepsza od metody brutalnej"""
+    """Funkcja do znajdowania ogrodzenia, lepsza od metody brutalnej
+
+    Działa najpierw tworząc dwie pomocnicze tablice o wielkości m x n w których przechowuje dla każdej
+    pozycji na polu które 'grodzimy' informację ile pozyji do góry i analogicznie w prawo jest pustych
+    (nie zajmowanych przez bagno), jeśli na danej pozycji jest bagno to wartości w obu tablicach dla
+    niej będą równe 0.
+    Następnie zaczynając od lewego dolnego rogu przechodzi macierz i dla każdej pozycji (na podstawie
+    pomocniczych tablic) sprawdza ile potencjalnie można do góry i w prawo wyznaczyć dwie ścianki płotu.
+    Następnie sprawdza pozycje górną prawą i dolną lewą, czy można w nich wyznaczyć kolejne dwie ścianki płotu.
+    Jeśli się okaże, że już wcześniej algorytm znalazł inne większe ogrodzenie niż może znaleźć dalej badając
+    aktualną pozycję, to przechodzi on do sprawdzania kolejnej."""
 
     left = np.zeros(arr.shape, int)
     up = np.zeros(arr.shape, int)
@@ -18,10 +28,7 @@ def func(arr):
                     up[y,x] += up[y-1,x]
                 if x > 0:
                     left[y, x] += left[y, x-1]
-    # print(left)
-    # print('-----------------')
-    # print(up)
-    # print(maxFence.getLen())
+
     for y in range(h - 1, 0, -1):
         for x in range(w - 1, 0, -1):
             ph, pw = up[y,x], left[y,x]#potential height & width
