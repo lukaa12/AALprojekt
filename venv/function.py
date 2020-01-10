@@ -35,24 +35,17 @@ def func(arr):
 
     for y in range(h-1,0,-1):
         for x in range(w-1,0,-1):
-            #print("(%d, %d)" % (y, x))
             if left[y, x] <= 1 or up[y, x] <= 1:
-                #print("\t -<1")
                 continue
             if (left[y, x] + up[y, x] -2) * 2 <= maxFence.getLen():
-                #print("\t -<maxFence")
                 continue
             for uptr in range(y - up[y, x] + 1, y, 1):
                 for lptr in range(x - left[y, x] +1, x, 1):
-                    #print("\t(%d, %d)" % (uptr, lptr))
                     if (x - lptr + y - uptr) * 2 <= maxFence.getLen():
-                        #print("\t -<INSIDEmaxFence")
                         break
                     width, height = x - lptr + 1, y - uptr +1
-                    #print("\t\tszer: %d<=%d wys: %d<=%d" % (width, left[uptr, x], height, up[y, lptr]))
                     if up[y, lptr] >= height and left[uptr, x] >= width:
                         maxFence.reset(uptr, lptr, y, x)
-                        #print("OK")
 
     return maxFence
 
@@ -66,17 +59,10 @@ def check(arr, fence):
 
 
 if __name__ == "__main__":
-    arr = generator.generate(1000,1000,0.6)
+    arr = generator.generate(10,20,0.3)
     np.save("matrices/array" + strftime("%m%d%H%M%S", gmtime()), arr)
-    # print(fenceSize(0,0,2,2))
-    # arr = loadTab.load()
     print(arr)
-    # print('-------------------')
     fencePredicted = func(arr)
     fencePredicted.show()
-    #fencePredicted = brutal.brutal(arr)
-    #fencePredicted.show()
-    #fence = Fence()
-    #fence.show()
-    #fence.reset(0,0,4,3)
-    #fence.show()
+    fencePredicted = brutal.brutal(arr)
+    fencePredicted.show()

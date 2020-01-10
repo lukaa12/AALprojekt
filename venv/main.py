@@ -8,41 +8,25 @@ import function
 
 def test():
     testOK = True
-    for i in [10, 20]:#, 40, 50, 70, 100, 150, 200, 300, 400, 500, 700, 900, 1000]:
-        for j in [i/2, 4 * i / 5, i]:
-            j = int(j)
-            passed = True
-            gestosc = np.random.rand(2)
-            matrix = [generator.generate(i,j,gestosc[0]), generator.generate(j,i,gestosc[1])]
-            out = function.func(matrix[0])
-            out.show()
-            if i * j <1600:
-                out2 = brutal.brutal(matrix[0])
-                out2.show()
-                if out.getLen() != out2.getLen():
-                    passed = testOK = False
+    for i in [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]:
+        for j in [i//4, i//2, i, 2*i, 4*i]:
+            for density in np.random.rand(5):
+                j = int(j)
+                passed = True
+                matrix = [generator.generate(i,j,gestosc[0]), generator.generate(j,i,gestosc[1])]
+                out = function.func(matrix[0])
+                out.show()
+                if i * j <800:
+                    out2 = brutal.brutal(matrix[0])
+                    out2.show()
+                    if out.getLen() != out2.getLen():
+                        passed = testOK = False
 
-            if  not function.check(matrix[0],out):
-                passed = testOK = False
-            okay = "testsOutput/test-Passed:"
-            if not passed:
-                okay = "testsOutput/test-Failed"
-                print("Fail")
-            np.save(okay + strftime("%m%d%H%M%S", gmtime()), matrix[0])
-            # passed = True
-            # out = function.func(matrix[1])
-            # if i * j < 1600:
-            #     out2 = brutal.brutal(matrix[1])
-            #     if out.getLen() != out2.getLen():
-            #         passed = False
-            #
-            # if not function.check(matrix[1], out):
-            #     passed = False
-            # okay = "-Passed:"
-            # if not passed:
-            #     okay = "-Failed:(" + str(out.y1) + "," + str(out.x1) + ")(" + str(out.y2) + "," + str(out.x2) + ")" + str(out.getLen())
-            #     print("Fail")
-            # np.save("testsOutput/test" + okay + strftime("%m%d%H%M%S", gmtime()), matrix[1])
+                    if  not function.check(matrix[0],out):
+                       passed = testOK = False
+                if not passed:
+                    print("Fail")
+
     if testOK:
         print("Tests passed")
 
