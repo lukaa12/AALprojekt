@@ -20,7 +20,6 @@ def func(arr):
 
     left = np.zeros(arr.shape, int)
     up = np.zeros(arr.shape, int)
-    print(type(left))
     h, w = arr.shape
     maxFence = Fence()
     for y in range(h):
@@ -36,30 +35,48 @@ def func(arr):
 
     for y in range(h-1,0,-1):
         for x in range(w-1,0,-1):
+            #print("(%d, %d)" % (y, x))
             if left[y, x] <= 1 or up[y, x] <= 1:
+                #print("\t -<1")
                 continue
             if (left[y, x] + up[y, x] -2) * 2 <= maxFence.getLen():
+                #print("\t -<maxFence")
                 continue
-            for lptr in range(x - left[y, x] +1, x, 1):
-                for uptr in range(y - up[x, y] +1, y, 1):
+            for uptr in range(y - up[y, x] + 1, y, 1):
+                for lptr in range(x - left[y, x] +1, x, 1):
+                    #print("\t(%d, %d)" % (uptr, lptr))
                     if (x - lptr + y - uptr) * 2 <= maxFence.getLen():
+                        #print("\t -<INSIDEmaxFence")
                         break
-                    if up[lptr, x] > y - uptr and left[y, uptr] > x - lptr: #???
-                        maxFence.reset(y, x, uptr, lptr)
+                    width, height = x - lptr + 1, y - uptr +1
+                    #print("\t\tszer: %d<=%d wys: %d<=%d" % (width, left[uptr, x], height, up[y, lptr]))
+                    if up[y, lptr] >= height and left[uptr, x] >= width:
+                        maxFence.reset(uptr, lptr, y, x)
+                        #print("OK")
+
     return maxFence
 
+def check(arr, fence):
+    if fence.getLen() == 0:
+        return True
+    if sum(arr[fence.y1, fence.x1:fence.x2 + 1]) + sum(arr[fence.y2, fence.x1:fence.x2 + 1]) + sum(arr[fence.y1 + 1:fence.y2, fence.x1]) + sum(arr[fence.y1 + 1:fence.y2, fence.x2]) == 0:
+        return True
+    else:
+        return False
+
+
 if __name__ == "__main__":
-    arr = generator.generate(5,5,0.2)
-    np.save("array" + strftime("%m%d%H%M%S", gmtime()), arr)
+    arr = generator.generate(1000,1000,0.6)
+    np.save("matrices/array" + strftime("%m%d%H%M%S", gmtime()), arr)
     # print(fenceSize(0,0,2,2))
     # arr = loadTab.load()
     print(arr)
     # print('-------------------')
     fencePredicted = func(arr)
     fencePredicted.show()
-    fencePredicted = brutal.brutal(arr)
-    fencePredicted.show()
-    for i in range(10):
-        if i % 2 == 0:
-            continue
-        print(i)
+    #fencePredicted = brutal.brutal(arr)
+    #fencePredicted.show()
+    #fence = Fence()
+    #fence.show()
+    #fence.reset(0,0,4,3)
+    #fence.show()
