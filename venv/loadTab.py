@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 
 def load():
     """Funkcja do ładownaia danych ze standardowego wejścia o 'działce'"""
@@ -6,7 +6,7 @@ def load():
     wymiary = input("Wprowadź wymiary tablicy w formacie 'szer'x'wys': ")
     wymiary = wymiary.split('x')
     szer, wys = int(wymiary[0]), int(wymiary[1])
-    matrix = numpy.zeros((wys,szer), int)
+    matrix = np.zeros((wys,szer), int)
     print("Wprowadź dane wiersz po wierszu, gdzie _ wolne pole X to bagno:")
     for i in range(wys):
         str = input('')
