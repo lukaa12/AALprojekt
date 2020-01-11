@@ -6,29 +6,37 @@ import generator
 import brutal
 import function
 
-def test():
+def test(start, step, repeat, total):
     testOK = True
-    for i in [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]:
-        for j in [i//4, i//2, i, 2*i, 4*i]:
-            for density in np.random.rand(5):
+    for i in range(start,total//repeat*step+1,step):
+        for j in [i]:
+            density = np.random.rand(5)
+            for density in range(repeat):
                 j = int(j)
                 passed = True
-                matrix = [generator.generate(i,j,gestosc[0]), generator.generate(j,i,gestosc[1])]
-                out = function.func(matrix[0])
-                out.show()
+                matrix = generator.generate(i,j,density)
+                out = function.func(matrix)
+                #out.show()
                 if i * j <800:
-                    out2 = brutal.brutal(matrix[0])
+                    out2 = brutal.brutal(matrix)
                     out2.show()
                     if out.getLen() != out2.getLen():
                         passed = testOK = False
 
-                    if  not function.check(matrix[0],out):
+                    if  not function.check(matrix,out):
                        passed = testOK = False
                 if not passed:
                     print("Fail")
+                else:
+                    print("Passed")
 
     if testOK:
         print("Tests passed")
+
+def usageHelp():
+    print("Usage: -m1 \nor -m2 -n{width}x{height} -d{density}\n"
+          "or -m3 -n{start size} -k{tests quantity} -step{step} -r{repeats for one size}")
+    exit(-1)
 
 argLen = sys.argv.__len__()
 
@@ -49,9 +57,14 @@ elif argLen == 4 and sys.argv[1] == '-m2':
     result2 = function.func(matrix)
     result2.show()
 
-elif sys.argv[1] == '-m3': # argLen == 6 and
-    test()
+elif argLen == 6 and sys.argv[1] == '-m3':
+    if sys.argv[2][:2] != '-n' or sys.argv[3][:2] != '-k' or sys.argv[4][:5] != '-step' or sys.argv[5][:2] != '-r':
+        usageHelp()
+    start = sys.argv[2][2:]
+    repeat = sys.argv[5][2:]
+    total = sys.argv[3][2:]
+    step = sys.argv[4][5:]
+    test(int(start),int(step),int(repeat),int(total))
 
 else:
-    print("Usage: -m1 or -m2 widthxheight density")
-    exit(-1)
+    usageHelp()
