@@ -1,35 +1,43 @@
 import numpy as np
-from time import gmtime, strftime
+from time import gmtime, strftime, process_time_ns
+from statistics import mean
 import sys
 import loadTab
 import generator
 import brutal
 import function
+import matplotlib.pyplot as plt
 
 def test(start, step, repeat, total):
+    timeAvgs = list()
+    size = list()
     testOK = True
+    density = np.random.rand()
     for i in range(start,total//repeat*step+1,step):
-        for j in [i]:
-            density = np.random.rand(5)
-            for density in range(repeat):
-                j = int(j)
-                passed = True
-                matrix = generator.generate(i,j,density)
-                out = function.func(matrix)
+        timeProbes = list()
+        size.append(i)
+        for density in range(repeat):
+            passed = True
+            matrix = generator.generate(i,i,density)
+            start = process_time_ns()
+            out = function.func(matrix)
+            stop = process_time_ns()
+            timeProbes.append(stop-start)
                 #out.show()
-                if i * j <800:
-                    out2 = brutal.brutal(matrix)
-                    out2.show()
-                    if out.getLen() != out2.getLen():
-                        passed = testOK = False
-
-                    if  not function.check(matrix,out):
-                       passed = testOK = False
-                if not passed:
-                    print("Fail")
-                else:
-                    print("Passed")
-
+            if i**2 <800:
+                out2 = brutal.brutal(matrix)
+                out2.show()
+                if out.getLen() != out2.getLen():
+                    passed = testOK = False
+                if  not function.check(matrix,out):
+                   passed = testOK = False
+            if not passed:
+                print("Fail")
+            else:
+                print("Passed")
+        timeAvgs.append(mean(timeProbes))
+    plt.plot(size, timeAvgs)
+    plt.show()
     if testOK:
         print("Tests passed")
 
