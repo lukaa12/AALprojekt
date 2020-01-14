@@ -99,7 +99,7 @@ def func2(arr):
                 if not horizontal and vertical:
                     --uptr
                 if not horizontal and not vertical:
-
+                    null
 
 
 
