@@ -13,7 +13,9 @@ def test(start, step, repeat, total):
     size = list()
     testOK = True
     density = np.random.rand()
-    for i in range(start,total//repeat*step+1,step):
+    for i in range(start, start + total // repeat * step + 1, step):
+        print(i)
+    for i in range(start,start + total//repeat*step+1,step):
         timeProbes = list()
         size.append(i)
         for density in range(repeat):
@@ -56,14 +58,16 @@ if argLen == 2 and sys.argv[1] == '-m1':
     result2.show()
 
 elif argLen == 4 and sys.argv[1] == '-m2':
-    wymiary = sys.argv[2].split('x')
+    wymiary = sys.argv[2][2:]
+    wymiary = wymiary.split('x')
     szer, wys = int(wymiary[0]), int(wymiary[1])
-    matrix = generator.generate(wys,szer,float(sys.argv[3]))
-    print(matrix)
-    result = brutal.brutal(matrix)
-    result.show()
-    result2 = function.func(matrix)
-    result2.show()
+    matrix = generator.generate(wys,szer,float(sys.argv[3][2:]))
+    # print(matrix)
+    # result = brutal.brutal(matrix)
+    # result.show()
+    # result2 = \
+    function.func2(matrix)
+    # result2.show()
 
 elif argLen == 6 and sys.argv[1] == '-m3':
     if sys.argv[2][:2] != '-n' or sys.argv[3][:2] != '-k' or sys.argv[4][:5] != '-step' or sys.argv[5][:2] != '-r':

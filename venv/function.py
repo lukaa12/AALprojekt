@@ -40,7 +40,8 @@ def func(arr):
             if (left[y, x] + up[y, x] -2) * 2 <= maxFence.getLen():
                 continue
             for uptr in range(y - up[y, x] + 1, y, 1):
-                for lptr in range(x - left[y, x] +1, x, 1):
+                for lptr in range(x - min(left[y, x],left[uptr,x]) +1, x, 1):
+
                     if (x - lptr + y - uptr) * 2 <= maxFence.getLen():
                         break
                     width, height = x - lptr + 1, y - uptr +1
@@ -48,6 +49,59 @@ def func(arr):
                         maxFence.reset(uptr, lptr, y, x)
 
     return maxFence
+
+def func2(arr):
+    left = np.zeros(arr.shape, int)
+    up = np.zeros(arr.shape, int)
+    right = np.zeros(arr.shape, int)
+    down = np.zeros(arr.shape, int)
+    h, w = arr.shape
+    maxFence = Fence()
+    for y in range(h):
+        for x in range(w):
+            if arr[y, x] == 0:
+                left[y, x], up[y, x] = 1, 1
+                if y > 0:
+                    up[y, x] += up[y - 1, x]
+                if x > 0:
+                    left[y, x] += left[y, x - 1]
+            else:
+                left[y, x], up[y, x] = 0, 0
+
+    for y in range(h-1, -1, -1):
+        for x in range(w-1, -1, -1):
+            if arr[y, x] == 0:
+                right[y, x], down[y, x] = 1, 1
+                if y < h - 1:
+                    down[y, x] += down[y + 1, x]
+                if x < w -1:
+                    right[y, x] += right[y, x + 1]
+            else:
+                right[y, x], down[y, x] = 0, 0
+    # print(arr)
+    # print(right)
+    # print(down)
+    for y in range(h-1,0,-1):
+        for x in range(w-1,0,-1):
+            if left[y, x] <= 1 or up[y, x] <= 1:
+                continue
+            if (left[y, x] + up[y, x] -2) * 2 <= maxFence.getLen():
+                continue
+            uptr = y - up[y, x] + 1
+            lptr = x - left[y, x] + 1
+            while true:
+                horizontal, vertical = right[uptr, lptr] >= left[y, x], down[uptr, lptr] >= up[y, x]
+                if horizontal and vertical:
+                    maxFence.reset(uptr, lptr, y, x)
+                    break
+                if horizontal and not vertical:
+                    --lptr
+                if not horizontal and vertical:
+                    --uptr
+                if not horizontal and not vertical:
+
+
+
 
 def check(arr, fence):
     if fence.getLen() == 0:
