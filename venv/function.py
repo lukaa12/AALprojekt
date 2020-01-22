@@ -7,6 +7,62 @@ import numpy as np
 from fence import Fence
 from time import gmtime, strftime
 import brutal
+import copy
+
+
+def optimal(arr):
+    """ """
+
+    maxFence = Fence()
+    for i in range(arr.shape[0]-1, 0, -1):
+        tmp = copy.deepcopy(arr)
+        group = 2
+        for j in range(tmp.shape[1]):
+            if arr[i, j] == 1 and j != 0 and arr[i, j-1] != 1:
+                group = group + 1
+            if tmp[i, j] == 0:
+                tmp[i, j] = group
+        for row in range(i-1, -1, -1):
+            for col in range(tmp.shape[1]):
+                if tmp[row, col] == 0 and tmp[row+1, col] >= 2:
+                    tmp[row, col] = tmp[row+1, col]
+        activGroup = -1
+        left, right = -1, -1
+        for row in range(i):
+            for col in range(tmp.shape[1]):
+                if tmp[row, col] == activGroup and left == -1:
+                    left = col
+                if tmp[row, col] == activGroup and left != -1:
+                    right = col
+                    if (right - left + i - row) * 2 > maxFence.getLen():
+                        maxFence.reset(row, col, i, right)
+                if tmp[row, col] >= 2 and tmp[row, col] != activGroup:
+                    activGroup = tmp[row, col]
+                    left = col
+                if tmp[row, col] == 1:
+                    left = -1
+
+                # if tmp[row, col] == activGroup:
+                #     if left == -1:
+                #         left = col
+                #     right = col
+                #     if left < right:
+                #         znaleźliśmy możliwość postawienia ogrodzenia trzeba sprawdzić czy jest lepsze od poprzednich
+                        # if (right - left + i - row) * 2 >= maxFence.getLen():
+                        #     maxFence.reset(row, left, i, right)
+                # elif tmp[row, col] > 1:
+                #     activGroup = tmp[row, col]
+                #     left = col
+                # elif tmp[row, col] == 1:
+                #     left = -1
+                # else:
+                #     continue
+        if i == 7:
+            print(tmp)
+
+    return maxFence
+
+
 
 def func(arr):
     """Funkcja do znajdowania ogrodzenia, lepsza od metody brutalnej
@@ -138,3 +194,8 @@ def func2(arr):
                         maxFence.reset(y - squareSide, x - longerSide, y, x)
 
     return maxFence
+
+if __name__ == "__main__":
+    pole = loadTab.load()
+    out = optimal(pole)
+    out = func(pole)

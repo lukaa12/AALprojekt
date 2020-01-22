@@ -17,7 +17,7 @@ def load():
             print("Błąd wprowadzania danych")
             break
         for j in range(szer):
-            if str[j] == 'x' or str[j]=='X':
+            if str[j] == 'x' or str[j]=='X' or str[j]=='1':
                 matrix[i][j] = 1
     return matrix
 

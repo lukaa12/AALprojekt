@@ -10,7 +10,7 @@ import numpy as np
 from loadTab import load
 from generator import generate
 from brutal import brutal
-from function import func
+from function import func, optimal
 from fence import Fence, check
 
 
@@ -27,20 +27,31 @@ def test(start, step, repeat, total):
     timeAvgs = list()
     size = list()
     testOK = True
-    density = np.random.rand()
+
 
     for i in range(start, start + total // repeat * step, step):
         timeProbes = list()
         size.append(i)
 
         for j in range(repeat):
+            density = np.random.rand()
             matrix = generate(i,i,density)
             startT = process_time_ns()
-            out = func(matrix)
+            out = optimal(matrix)
             stopT = process_time_ns()
             timeProbes.append(stopT-startT)
             if  not check(matrix,out):
-                testOK = False
+                print("Błąd, funkcja optymalna zwróciła niedopuszczalne rozwiązanie")
+                print(matrix)
+                print("---------------------")
+                out.show()
+                return False
+            if out.getLen() < func(matrix).getLen():
+                print("Błąd, funkcja optymalna zwróciła poprawne, ale nie najlepsze roziązanie")
+                print(matrix)
+                print("---------------------")
+                out.show()
+                return False
 
         timeAvgs.append(mean(timeProbes))
 
@@ -52,11 +63,11 @@ def test(start, step, repeat, total):
 
     nMed = size[floor(size.__len__() // 2)]
     timeMed = timeAvgs[(int)(nMed-start)//step]
-    c = nMed**3 / timeMed
+    c = nMed**2 / timeMed
     print("Algorytm z asymptotą O(T(n))")
     print("n\t\tt(n)[ms]\t\tq(n)")
     for i in  range(size.__len__()):
-        q = c * timeAvgs[i] / size[i]**3
+        q = c * timeAvgs[i] / size[i]**2
         print(size[i], "\t",  timeAvgs[i]//1000000,"ms\t\t", round(q,3))
 
     plt.show()
@@ -67,7 +78,7 @@ if __name__== "__main__":
 
     if argLen == 2 and argv[1] == '-m1':
         matrix = load()
-        result = brutal(matrix)
+        result = optimal(matrix)
         result.show()
         result1 = func(matrix)
         result1.show()
