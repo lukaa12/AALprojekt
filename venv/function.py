@@ -11,9 +11,9 @@ import copy
 
 
 def optimal(arr):
-    """ """
 
     maxFence = Fence()
+    maxLenght = 0
     for i in range(arr.shape[0]-1, 0, -1):
         tmp = copy.deepcopy(arr)
         group = 2
@@ -26,39 +26,27 @@ def optimal(arr):
             for col in range(tmp.shape[1]):
                 if tmp[row, col] == 0 and tmp[row+1, col] >= 2:
                     tmp[row, col] = tmp[row+1, col]
-        activGroup = -1
-        left, right = -1, -1
-        for row in range(i):
-            for col in range(tmp.shape[1]):
-                if tmp[row, col] == activGroup and left == -1:
-                    left = col
-                if tmp[row, col] == activGroup and left != -1:
-                    right = col
-                    if (right - left + i - row) * 2 > maxFence.getLen():
-                        maxFence.reset(row, col, i, right)
-                if tmp[row, col] >= 2 and tmp[row, col] != activGroup:
-                    activGroup = tmp[row, col]
-                    left = col
-                if tmp[row, col] == 1:
-                    left = -1
 
-                # if tmp[row, col] == activGroup:
-                #     if left == -1:
-                #         left = col
-                #     right = col
-                #     if left < right:
-                #         znaleźliśmy możliwość postawienia ogrodzenia trzeba sprawdzić czy jest lepsze od poprzednich
-                        # if (right - left + i - row) * 2 >= maxFence.getLen():
-                        #     maxFence.reset(row, left, i, right)
-                # elif tmp[row, col] > 1:
-                #     activGroup = tmp[row, col]
-                #     left = col
-                # elif tmp[row, col] == 1:
-                #     left = -1
-                # else:
-                #     continue
-        if i == 7:
-            print(tmp)
+        for row in range(i):
+            activGroup = -1
+            left, right = -1, -1
+            for col in range(tmp.shape[1]):
+                if left == -1:
+                    if tmp[row, col] >= 2:
+                        left = col
+                        activGroup = tmp[row, col]
+                    continue
+                else:
+                    if tmp[row, col] == activGroup:
+                        right = col
+                        if right > left and maxFence.getLen() <= (right-left+i-row)*2:
+                            maxLenght = (right-left+i-row)*2
+                            maxFence.reset(row, left, i, right)
+                    if tmp[row, col] >= 2 and tmp[row, col] != activGroup:
+                        left = col
+                        activGroup = tmp[row, col]
+                    if tmp[row, col] == 1:
+                        left = -1
 
     return maxFence
 
@@ -198,4 +186,6 @@ def func2(arr):
 if __name__ == "__main__":
     pole = loadTab.load()
     out = optimal(pole)
+    out.show()
     out = func(pole)
+    out.show()

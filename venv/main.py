@@ -32,9 +32,8 @@ def test(start, step, repeat, total):
     for i in range(start, start + total // repeat * step, step):
         timeProbes = list()
         size.append(i)
-
+        density = np.random.rand()
         for j in range(repeat):
-            density = np.random.rand()
             matrix = generate(i,i,density)
             startT = process_time_ns()
             out = optimal(matrix)
@@ -63,11 +62,11 @@ def test(start, step, repeat, total):
 
     nMed = size[floor(size.__len__() // 2)]
     timeMed = timeAvgs[(int)(nMed-start)//step]
-    c = nMed**2 / timeMed
-    print("Algorytm z asymptotą O(T(n))")
+    c = nMed**3 / timeMed
+    print("Algorytm z asymptotą O(n^3)")
     print("n\t\tt(n)[ms]\t\tq(n)")
     for i in  range(size.__len__()):
-        q = c * timeAvgs[i] / size[i]**2
+        q = c * timeAvgs[i] / size[i]**3
         print(size[i], "\t",  timeAvgs[i]//1000000,"ms\t\t", round(q,3))
 
     plt.show()
