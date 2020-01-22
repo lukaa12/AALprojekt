@@ -1,3 +1,7 @@
+# Autor: Lukasz Wolanin
+# Email: 01133389@pw.edu.pl lub lukaszwolanin98@gmail.com
+
+
 class Fence:
     """Klasa zawierająca informacje o prostokątnym ogrodzeniu
 
@@ -33,3 +37,15 @@ class Fence:
         self.y2 = y2
         self.x2 = x2
         self.len = (self.y2 - self.y1 + self.x2 - self.x1) * 2
+
+
+def check(arr, fence):
+    """Funkcja do sprawdzania czy rozwiązanie jest dopuszczalne"""
+
+    if fence.getLen() == 0:
+        return True
+    if sum(arr[fence.y1, fence.x1:fence.x2 + 1]) + sum(arr[fence.y2, fence.x1:fence.x2 + 1]) + sum(arr[fence.y1 + 1:fence.y2, fence.x1]) + sum(arr[fence.y1 + 1:fence.y2, fence.x2]) == 0:
+        return True
+    else:
+        return False
+

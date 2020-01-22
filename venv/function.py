@@ -1,3 +1,6 @@
+# Autor: Lukasz Wolanin
+# Email: 01133389@pw.edu.pl lub lukaszwolanin98@gmail.com
+
 import generator
 import loadTab
 import numpy as np
@@ -50,6 +53,9 @@ def func(arr):
 
     return maxFence
 
+
+
+
 def func2(arr):
     left = np.zeros(arr.shape, int)
     up = np.zeros(arr.shape, int)
@@ -78,45 +84,57 @@ def func2(arr):
                     right[y, x] += right[y, x + 1]
             else:
                 right[y, x], down[y, x] = 0, 0
-    # print(arr)
-    # print(right)
-    # print(down)
+
     for y in range(h-1,0,-1):
         for x in range(w-1,0,-1):
             if left[y, x] <= 1 or up[y, x] <= 1:
                 continue
             if (left[y, x] + up[y, x] -2) * 2 <= maxFence.getLen():
                 continue
-            uptr = y - up[y, x] + 1
-            lptr = x - left[y, x] + 1
-            while true:
-                horizontal, vertical = right[uptr, lptr] >= left[y, x], down[uptr, lptr] >= up[y, x]
-                if horizontal and vertical:
-                    maxFence.reset(uptr, lptr, y, x)
-                    break
-                if horizontal and not vertical:
-                    --lptr
-                if not horizontal and vertical:
-                    --uptr
-                if not horizontal and not vertical:
-                    null
+            if left[y, x] >= up[y, x]:
+                squareSide = up[y, x] - 1
+                while squareSide > 0:
+                    if left[y-squareSide, x] >= squareSide + 1:
+                        break
+                    --squareSide
+                for longerSide in range(max(left[y, x],left[y-squareSide, x]) - 1, 0, -1):
+                    if up[y,x-longerSide] >= squareSide + 1 and 2*(squareSide+longerSide) > maxFence.getLen():
+                        maxFence.reset(y-squareSide,x-longerSide,y,x)
+            if left[y, x] < up[y, x]:
+                squareSide = left[y, x] - 1
+                while squareSide > 0:
+                    if up[y, x-squareSide] >= squareSide + 1:
+                        break
+                    --squareSide
+                for longerSide in range(max(up[y, x],up[y, x-squareSide]) - 1, 0, -1):
+                    if left[y-longerSide,x] >= squareSide + 1 and 2*(squareSide+longerSide) > maxFence.getLen():
+                        maxFence.reset(y-squareSide,x-longerSide,y,x)
 
+    for y in range(h):
+        for x in range(w):
+            if right[y, x] <= 1 or down[y, x] <= 1:
+                continue
+            if (right[y, x] + down[y, x] - 2) * 2 <= maxFence.getLen():
+                continue
 
+            if right[y, x] >= down[y, x]:
+                squareSide = down[y, x] - 1
+                while squareSide > 0:
+                    if right[y + squareSide, x] >= squareSide + 1:
+                        break
+                    --squareSide
+                for longerSide in range(max(right[y, x], right[y + squareSide, x]) - 1, 0, -1):
+                    if down[y, x + longerSide] >= squareSide + 1 and 2 * (squareSide + longerSide) > maxFence.getLen():
+                        maxFence.reset(y - squareSide, x - longerSide, y, x)
 
-def check(arr, fence):
-    if fence.getLen() == 0:
-        return True
-    if sum(arr[fence.y1, fence.x1:fence.x2 + 1]) + sum(arr[fence.y2, fence.x1:fence.x2 + 1]) + sum(arr[fence.y1 + 1:fence.y2, fence.x1]) + sum(arr[fence.y1 + 1:fence.y2, fence.x2]) == 0:
-        return True
-    else:
-        return False
+            if right[y, x] <= down[y, x]:
+                squareSide = right[y, x] - 1
+                while squareSide > 0:
+                    if down[y, x + squareSide] >= squareSide + 1:
+                        break
+                    --squareSide
+                for longerSide in range(max(down[y, x], down[y, x + squareSide]) - 1, 0, -1):
+                    if right[y + longerSide, x] >= squareSide + 1 and 2 * (squareSide + longerSide) > maxFence.getLen():
+                        maxFence.reset(y - squareSide, x - longerSide, y, x)
 
-
-if __name__ == "__main__":
-    arr = generator.generate(10,20,0.3)
-    np.save("matrices/array" + strftime("%m%d%H%M%S", gmtime()), arr)
-    print(arr)
-    fencePredicted = func(arr)
-    fencePredicted.show()
-    fencePredicted = brutal.brutal(arr)
-    fencePredicted.show()
+    return maxFence

@@ -1,8 +1,14 @@
+# Autor: Lukasz Wolanin
+# Email: 01133389@pw.edu.pl lub lukaszwolanin98@gmail.com
+
 from fence import Fence
 
 def brutal(arr):
     """Funkcja znajdująca najdłuższe możliwe do ustawienia ogrodzenie metodą brute force.
 
+    Działa rozpatrując wszystkie możliwe kombinacje punktów, dla każdej sprawdzając sumę
+    elementów leżących na krawędziach wyznaczonych przez punkty leżące na przekątnej.
+    Złożoność czasowa = O(n^3*m^3) gdzie n i m to liczba wierszy i kolumn
     Zwraca obiekt klasy Fence zawierający dane znalezionego ogrodzenia."""
 
     h, w = arr.shape

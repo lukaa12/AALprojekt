@@ -1,3 +1,6 @@
+# Autor: Lukasz Wolanin
+# Email: 01133389@pw.edu.pl lub lukaszwolanin98@gmail.com
+
 import numpy as np
 
 def generate(h, w, p):
