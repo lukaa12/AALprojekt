@@ -28,37 +28,36 @@ def optimal(arr):
     maxLenght = 0
     print(arr)
     for i in range(arr.shape[0]-1, 0, -1):
-        tmp = copy.deepcopy(arr)
         group = 2
-        for j in range(tmp.shape[1]):
+        for j in range(arr.shape[1]):
             if arr[i, j] == 1 and j != 0 and arr[i, j-1] != 1:
                 group = group + 1
-            if tmp[i, j] == 0:
-                tmp[i, j] = group
+            if arr[i, j] != 1:
+                arr[i, j] = group
         for row in range(i-1, -1, -1):
-            for col in range(tmp.shape[1]):
-                if tmp[row, col] == 0 and tmp[row+1, col] >= 2:
-                    tmp[row, col] = tmp[row+1, col]
-        print(tmp)
+            for col in range(arr.shape[1]):
+                if arr[row, col] == 0 and arr[row+1, col] >= 2:
+                    arr[row, col] = arr[row+1, col]
+        print(arr)
         for row in range(i):
             activGroup = -1
             left, right = -1, -1
-            for col in range(tmp.shape[1]):
+            for col in range(arr.shape[1]):
                 if left == -1:
-                    if tmp[row, col] >= 2:
+                    if arr[row, col] >= 2:
                         left = col
-                        activGroup = tmp[row, col]
+                        activGroup = arr[row, col]
                     continue
                 else:
-                    if tmp[row, col] == activGroup:
+                    if arr[row, col] == activGroup:
                         right = col
                         if right > left and maxFence.getLen() <= (right-left+i-row)*2:
                             maxLenght = (right-left+i-row)*2
                             maxFence.reset(row, left, i, right)
-                    if tmp[row, col] >= 2 and tmp[row, col] != activGroup:
+                    if arr[row, col] >= 2 and arr[row, col] != activGroup:
                         left = col
-                        activGroup = tmp[row, col]
-                    if tmp[row, col] == 1:
+                        activGroup = arr[row, col]
+                    if arr[row, col] == 1:
                         left = -1
 
     return maxFence
