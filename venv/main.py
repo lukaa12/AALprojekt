@@ -27,18 +27,17 @@ def test(start, step, repeat, total):
     timeAvgs = list()
     size = list()
     testOK = True
-
-
+    density = np.random()
     for i in range(start, start + total // repeat * step, step):
         timeProbes = list()
         size.append(i)
-        density = np.random.rand()
         for j in range(repeat):
             matrix = generate(i,i,density)
             startT = process_time_ns()
             out = optimal(matrix)
             stopT = process_time_ns()
             timeProbes.append(stopT-startT)
+            print(i)
             if  not check(matrix,out):
                 print("Błąd, funkcja optymalna zwróciła niedopuszczalne rozwiązanie")
                 print(matrix)
