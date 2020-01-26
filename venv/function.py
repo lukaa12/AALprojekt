@@ -5,7 +5,6 @@ import generator
 import loadTab
 import numpy as np
 from fence import Fence
-from time import gmtime, strftime
 import brutal
 import copy
 
@@ -26,7 +25,6 @@ def optimal(arr):
 
     maxFence = Fence()
     maxLenght = 0
-    print(arr)
     for i in range(arr.shape[0]-1, 0, -1):
         group = 2
         for j in range(arr.shape[1]):
@@ -38,7 +36,6 @@ def optimal(arr):
             for col in range(arr.shape[1]):
                 if arr[row, col] == 0 and arr[row+1, col] >= 2:
                     arr[row, col] = arr[row+1, col]
-        print(arr)
         for row in range(i):
             activGroup = -1
             left, right = -1, -1
