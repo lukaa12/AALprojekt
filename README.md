@@ -47,3 +47,14 @@ or -m3 -n{start size} -k{tests quantity} -step{step} -r{repeats for one size}
  generator.py
  loadTab.py
  
+ Packages:
+cycler==0.10.0
+kiwisolver==1.1.0
+matplotlib==3.1.2
+numpy==1.17.3
+pip==19.0.3
+pyparsing==2.4.6
+python-dateutil==2.8.1
+setuptools==40.8.0
+six==1.13.0
+virtualenv==16.7.6
