@@ -27,7 +27,7 @@ def test(start, step, repeat, total):
     timeAvgs = list()
     size = list()
     testOK = True
-    density = np.random()
+    density = np.random.rand()
     for i in range(start, start + total // repeat * step, step):
         timeProbes = list()
         size.append(i)
@@ -58,6 +58,7 @@ def test(start, step, repeat, total):
         print("Tests passed")
     else:
         print("Error has occured")
+        return
 
     nMed = size[floor(size.__len__() // 2)]
     timeMed = timeAvgs[(int)(nMed-start)//step]
@@ -86,12 +87,19 @@ if __name__== "__main__":
         wymiary = wymiary.split('x')
         szer, wys = int(wymiary[0]), int(wymiary[1])
         matrix = generate(wys,szer,float(argv[3][2:]))
+        result = optimal(matrix)
+        result.show()
+        result1 = func(matrix)
+        result1.show()
 
 
     elif argLen == 6 and argv[1] == '-m3':
         if argv[2][:2] != '-n' or argv[3][:2] != '-k' or argv[4][:5] != '-step' or argv[5][:2] != '-r':
             usageHelp()
         start = argv[2][2:]
+        if(start <= 0):
+            print("Wrong start size")
+            exit(0)
         repeat = argv[5][2:]
         total = argv[3][2:]
         step = argv[4][5:]

@@ -24,7 +24,6 @@ def optimal(arr):
      zapamiętać i zwrócić to najlepsze."""
 
     maxFence = Fence()
-    maxLenght = 0
     for i in range(arr.shape[0]-1, 0, -1):
         group = 2
         for j in range(arr.shape[1]):
@@ -36,26 +35,32 @@ def optimal(arr):
             for col in range(arr.shape[1]):
                 if arr[row, col] == 0 and arr[row+1, col] >= 2:
                     arr[row, col] = arr[row+1, col]
+        # print(arr)
         for row in range(i):
             activGroup = -1
             left, right = -1, -1
             for col in range(arr.shape[1]):
-                if left == -1:
-                    if arr[row, col] >= 2:
+                # print("(" + str(row) + "," + str(left) + ")-(" + str(i) + "," + str(right) + ")")
+                # print("(" + str(row) + "," + str(col) + ")")
+                if(arr[row, col] >= 2 and arr[row, col] != activGroup):
+                    activGroup = arr[row, col]
+                    left = col
+                    right = col
+                elif(arr[row, col] == activGroup):
+                    right = col
+                    if(left == -1):
                         left = col
-                        activGroup = arr[row, col]
-                    continue
-                else:
-                    if arr[row, col] == activGroup:
-                        right = col
-                        if right > left and maxFence.getLen() <= (right-left+i-row)*2:
-                            maxLenght = (right-left+i-row)*2
-                            maxFence.reset(row, left, i, right)
-                    if arr[row, col] >= 2 and arr[row, col] != activGroup:
-                        left = col
-                        activGroup = arr[row, col]
-                    if arr[row, col] == 1:
-                        left = -1
+                    if(left < right and (right - left + i - row)*2 > maxFence.getLen()):
+                        maxFence.reset(row, left, i, right)
+                elif(arr[row, col] == 1):
+                    left = -1
+                    right = -1
+            # have to cleanup the array
+        for i in range(arr.shape[0]):
+            for j in range(arr.shape[1]):
+                if (arr[i, j] != 1):
+                    arr[i, j] = 0
+
 
     return maxFence
 
