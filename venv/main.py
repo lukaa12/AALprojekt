@@ -37,7 +37,6 @@ def test(start, step, repeat, total):
             out = optimal(matrix)
             stopT = process_time_ns()
             timeProbes.append(stopT-startT)
-            print(i)
             if  not check(matrix,out):
                 print("Błąd, funkcja optymalna zwróciła niedopuszczalne rozwiązanie")
                 print(matrix)
@@ -53,22 +52,22 @@ def test(start, step, repeat, total):
 
         timeAvgs.append(mean(timeProbes))
 
-    plt.plot(size, timeAvgs)
     if testOK:
         print("Tests passed")
     else:
         print("Error has occured")
         return
-
     nMed = size[floor(size.__len__() // 2)]
     timeMed = timeAvgs[(int)(nMed-start)//step]
     c = nMed**3 / timeMed
-    print("Algorytm z asymptotą O(n^3)")
-    print("n\t\tt(n)[ms]\t\tq(n)")
+    print("-----------------------------")
+    print(" Algorytm z asymptotą O(n^3)")
+    print("   n | t(n)[ms] | q(n)")
     for i in  range(size.__len__()):
         q = c * timeAvgs[i] / size[i]**3
-        print(size[i], "\t",  timeAvgs[i]//1000000,"ms\t\t", round(q,3))
-
+        print('{:4} | {:-7}  | {:-2.3}'.format(size[i], timeAvgs[i]//1000000, round(q,3)))
+    print("-----------------------------")
+    plt.plot(size, timeAvgs)
     plt.show()
 
 
@@ -96,14 +95,14 @@ if __name__== "__main__":
     elif argLen == 6 and argv[1] == '-m3':
         if argv[2][:2] != '-n' or argv[3][:2] != '-k' or argv[4][:5] != '-step' or argv[5][:2] != '-r':
             usageHelp()
-        start = argv[2][2:]
-        if(start <= 0):
-            print("Wrong start size")
+        start = int(argv[2][2:])
+        repeat = int(argv[5][2:])
+        total = int(argv[3][2:])
+        step = int(argv[4][5:])
+        if(step <= 0 or start <= 0 or repeat <=0 or total <=0 or step <=0):
+            print("Wrong arguments, all must be positive numbers")
             exit(0)
-        repeat = argv[5][2:]
-        total = argv[3][2:]
-        step = argv[4][5:]
-        test(int(start),int(step),int(repeat),int(total))
+        test(start, step, repeat, total)
 
     else:
         usageHelp()
